@@ -38,12 +38,12 @@ namespace VShop.ProductAPI.Context
                 new Category
                 {
                     Id = 1,
-                    Name = "Carros",
+                    Name = "Material Escolar",
                 },
                 new Category
                 {
                     Id = 2,
-                    Name = "Motos",
+                    Name = "Acessórios",
                 }
                 );
 

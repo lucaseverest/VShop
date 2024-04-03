@@ -1,6 +1,0 @@
-@VShop.ProductAPI_HostAddress = http://localhost:5051
-
-GET {{VShop.ProductAPI_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

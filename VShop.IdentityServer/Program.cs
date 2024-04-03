@@ -1,7 +1,9 @@
+using Duende.IdentityServer.Services;
 using Microsoft.AspNetCore.Identity;
 using VShop.IdentityServer.Configuration;
 using VShop.IdentityServer.Data;
 using VShop.IdentityServer.SeedDatabase;
+using VShop.IdentityServer.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +33,8 @@ var builderIdentityServer = builder.Services.AddIdentityServer(options =>
 builderIdentityServer.AddDeveloperSigningCredential();
 
 builder.Services.AddScoped<IDatabaseSeedInitializer, DatabaseIdentityServerInitializer>();
+builder.Services.AddScoped<IProfileService, ProfileAppService>();
+
 
 var app = builder.Build();
 
@@ -50,11 +54,11 @@ app.UseRouting();
 app.UseIdentityServer();
 app.UseAuthorization();
 
-SeedDatabaseIdentityServer(app);
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+SeedDatabaseIdentityServer(app);
 
 app.Run();
 void SeedDatabaseIdentityServer(IApplicationBuilder app)
@@ -66,5 +70,6 @@ void SeedDatabaseIdentityServer(IApplicationBuilder app)
 
         initRolesUsers.InitializeSeedRoles();
         initRolesUsers.InitializeSeedUsers();
+
     }
 }

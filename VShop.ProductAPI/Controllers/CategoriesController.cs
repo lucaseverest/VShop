@@ -10,7 +10,7 @@ namespace VShop.ProductAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = Role.Admin)]
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoryService _categoryService;

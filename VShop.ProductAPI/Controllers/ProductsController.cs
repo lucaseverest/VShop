@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using VShop.ProductAPI.DTOs;
+using VShop.ProductAPI.Roles;
 using VShop.ProductAPI.Services;
 
 namespace VShop.ProductAPI.Controllers
@@ -40,6 +41,7 @@ namespace VShop.ProductAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Role.Admin)]
         public async Task<ActionResult> Post([FromBody] ProductDTO produtoDto)
         {
             if (produtoDto == null)
@@ -52,6 +54,7 @@ namespace VShop.ProductAPI.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = Role.Admin)]
         public async Task<ActionResult<ProductDTO>> Put([FromBody] ProductDTO produtoDto)
         {
             if (produtoDto == null)
@@ -63,6 +66,7 @@ namespace VShop.ProductAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = Role.Admin)]
         public async Task<ActionResult<ProductDTO>> Delete(int id)
         {
             var produtoDto = await _productService.GetProductById(id);

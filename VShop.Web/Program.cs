@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using VShop.Web.Services;
 using VShop.Web.Services.Interfaces;
+using VShop.Web.Services.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,11 +50,17 @@ builder.Services.AddAuthentication(options =>
     }
 );
 
-builder.Services.AddHttpClient("ProductAPI", c =>
+builder.Services.AddHttpClient("ProductApi", c =>
 {
-    c.BaseAddress = new Uri(builder.Configuration["ServiceUri: ProductAPI"]);
+    c.BaseAddress = new Uri(builder.Configuration["ServiceUri:ProductAPI"]);
 });
 
+builder.Services.AddHttpClient("CartApi", c =>
+{
+    c.BaseAddress = new Uri(builder.Configuration["ServiceUri:CartAPI"]);
+});
+
+builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 
