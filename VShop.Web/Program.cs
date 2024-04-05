@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication;
 using VShop.Web.Services;
 using VShop.Web.Services.Interfaces;
 using VShop.Web.Services.Contracts;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,14 +29,6 @@ builder.Services.AddAuthentication(options =>
     })
     .AddOpenIdConnect("oidc", options =>
     {
-        options.Events.OnRemoteFailure = context =>
-        {
-            context.Response.Redirect("/");
-            context.HandleResponse();
-
-            return Task.FromResult(0);
-        };
-
         options.Authority = builder.Configuration["ServiceUri:IdentityServer"];
         options.GetClaimsFromUserInfoEndpoint = true;
         options.ClientId = "vshop";
@@ -47,23 +40,41 @@ builder.Services.AddAuthentication(options =>
         options.TokenValidationParameters.RoleClaimType = "role";
         options.Scope.Add("vshop");
         options.SaveTokens = true;
+        options.Events = new OpenIdConnectEvents()
+        {
+            OnAuthenticationFailed = c =>
+            {
+                c.HandleResponse();
+
+                c.Response.StatusCode = 500;
+                c.Response.ContentType = "text/plain";
+                return c.Response.WriteAsync("An error occurred processing your authentication.");
+            }
+        };
     }
 );
 
-builder.Services.AddHttpClient("ProductApi", c =>
+builder.Services.AddHttpClient<IProductService, ProductService>("ProductApi", c =>
 {
-    c.BaseAddress = new Uri(builder.Configuration["ServiceUri:ProductAPI"]);
+    c.BaseAddress = new Uri(builder.Configuration["ServiceUri:ProductApi"]);
+    c.DefaultRequestHeaders.Add("Connection", "Keep-Alive");
+    c.DefaultRequestHeaders.Add("Keep-Alive", "3600");
+    c.DefaultRequestHeaders.Add("User-Agent", "HttpClientFactory-ProductApi");
 });
 
-builder.Services.AddHttpClient("CartApi", c =>
-{
-    c.BaseAddress = new Uri(builder.Configuration["ServiceUri:CartAPI"]);
-});
+builder.Services.AddHttpClient<ICartService, CartService>("CartApi",
+    c => c.BaseAddress = new Uri(builder.Configuration["ServiceUri:CartApi"])
+);
+
+builder.Services.AddHttpClient<ICouponService, CouponService>("DiscountApi", c =>
+   c.BaseAddress = new Uri(builder.Configuration["ServiceUri:DiscountApi"])
+);
+
+builder.Services.AddScoped<ICouponService, CouponService>();
 
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
-
 
 var app = builder.Build();
 
@@ -71,18 +82,14 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
 
 app.MapControllerRoute(
     name: "default",

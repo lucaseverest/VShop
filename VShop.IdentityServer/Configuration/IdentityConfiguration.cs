@@ -49,7 +49,7 @@ namespace VShop.IdentityServer.Configuration
                 new Client
                 {
                     ClientId = "vshop",
-                    ClientSecrets = { new Secret("abracadabra#simsalabim".Sha256())},
+                    ClientSecrets = { new Secret("abracadabra#simsalabim".Sha256()) },
                     AllowedGrantTypes = GrantTypes.Code, //via codigo
                     RedirectUris = {"https://localhost:7019/signin-oidc"},//login
                     PostLogoutRedirectUris = {"https://localhost:7019/signout-callback-oidc"},//logout

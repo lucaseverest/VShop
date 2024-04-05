@@ -47,6 +47,39 @@ namespace VShop.ProductAPI.Context
                 }
                 );
 
+            modelBuilder.Entity<Product>().HasData(
+                new Product
+                {
+                    Id = 1,
+                    Name = "Lapis Coloridos",
+                    Price=10,
+                    Description="Muitas Cores",
+                    Stock=12,
+                    ImgURL= "escolar/lapis_coloridos1.jpg",
+                    CategoryId= 1,
+                },
+                new Product
+                {
+                    Id = 2,
+                    Name = "Borracha Branca",
+                    Price = 10,
+                    Description = "Padrão",
+                    Stock = 12,
+                    ImgURL = "escolar/borracha_branca1.jpg",
+                    CategoryId = 1,
+                },
+                new Product
+                {
+                    Id = 3,
+                    Name = "Caneta Bic",
+                    Price = 10,
+                    Description = "Raiz",
+                    Stock = 12,
+                    ImgURL = "escolar/caneta_bic4.jpg",
+                    CategoryId = 1,
+                }
+                );
+
             base.OnModelCreating(modelBuilder);
         }
     }

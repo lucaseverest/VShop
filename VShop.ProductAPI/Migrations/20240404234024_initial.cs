@@ -7,7 +7,7 @@
 namespace VShop.ProductAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class createdb : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -54,8 +54,18 @@ namespace VShop.ProductAPI.Migrations
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { 1, "Carros" },
-                    { 2, "Motos" }
+                    { 1, "Material Escolar" },
+                    { 2, "Acessórios" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "Id", "CategoryId", "Description", "ImgURL", "Name", "Price", "Stock" },
+                values: new object[,]
+                {
+                    { 1, 1, "Muitas Cores", "escolar/lapis_coloridos1.jpg", "Lapis Coloridos", 10m, 12L },
+                    { 2, 1, "Padrão", "escolar/borracha_branca1.jpg", "Borracha Branca", 10m, 12L },
+                    { 3, 1, "Raiz", "escolar/caneta_bic4.jpg", "Caneta Bic", 10m, 12L }
                 });
 
             migrationBuilder.CreateIndex(

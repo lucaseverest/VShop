@@ -10,8 +10,8 @@ using VShop.ProductAPI.Context;
 namespace VShop.ProductAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240328194234_create-db")]
-    partial class createdb
+    [Migration("20240404234024_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,12 +38,12 @@ namespace VShop.ProductAPI.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Carros"
+                            Name = "Material Escolar"
                         },
                         new
                         {
                             Id = 2,
-                            Name = "Motos"
+                            Name = "Acessórios"
                         });
                 });
 
@@ -80,6 +80,38 @@ namespace VShop.ProductAPI.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CategoryId = 1,
+                            Description = "Muitas Cores",
+                            ImgURL = "escolar/lapis_coloridos1.jpg",
+                            Name = "Lapis Coloridos",
+                            Price = 10m,
+                            Stock = 12L
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CategoryId = 1,
+                            Description = "Padrão",
+                            ImgURL = "escolar/borracha_branca1.jpg",
+                            Name = "Borracha Branca",
+                            Price = 10m,
+                            Stock = 12L
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CategoryId = 1,
+                            Description = "Raiz",
+                            ImgURL = "escolar/caneta_bic4.jpg",
+                            Name = "Caneta Bic",
+                            Price = 10m,
+                            Stock = 12L
+                        });
                 });
 
             modelBuilder.Entity("VShop.ProductAPI.Models.Product", b =>
